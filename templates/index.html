@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instagram Message Sender</title>
+</head>
+<body>
+    <h2>Send Instagram Message with Optional Images</h2>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <label for="target_username">Target Username:</label><br>
+        <input type="text" id="target_username" name="target_username" required><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="images">Attach up to 10 Images:</label><br>
+        <input type="file" id="images" name="images" accept="image/*" multiple><br><br>
+
+        <input type="submit" value="Send Message">
+    </form>
+
+    {% if status %}
+        <p><strong>{{ status }}</strong></p>
+    {% endif %}
+</body>
+</html>
