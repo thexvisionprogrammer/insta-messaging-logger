@@ -2,23 +2,26 @@ from flask import Flask, render_template, request
 from instagrapi import Client
 import gspread
 from google.oauth2.service_account import Credentials
+from dotenv import load_dotenv
 import os
 import datetime
 import pickle
 
-# Initialize Flask app with template_folder set to the current directory
+# Load environment variables from .env file
+load_dotenv()
+
+# Initialize Flask app
 app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-# Instagram login credentials
-IG_USERNAME = 'ramandeepra121004'
-IG_PASSWORD = 'Rahul@9899'
+# Load credentials from environment variables
+IG_USERNAME = os.getenv('IG_USERNAME')
+IG_PASSWORD = os.getenv('IG_PASSWORD')
+SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE')
+SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
 
 # Google Sheets setup
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-SERVICE_ACCOUNT_FILE = 'insta_logger.json'
-SPREADSHEET_ID = '1ZKnxcXDZeKuhD-I_s-JWJY67qldmGB7pdUQ74CRrvHU'
-
 creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 gs_client = gspread.authorize(creds)
 sheet = gs_client.open_by_key(SPREADSHEET_ID).sheet1
@@ -73,7 +76,7 @@ def home():
 
             # Log text only with status indicator
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            row = [now, IG_USERNAME, target_username, message, "✅"]  # Add the green tick here
+            row = [now, IG_USERNAME, target_username, message, "✅"]
             sheet.append_row(row)
 
             status_message = f"✅ Message and up to 10 images sent successfully."
