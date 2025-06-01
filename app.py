@@ -4,12 +4,14 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 import datetime
+import pickle
 
-app = Flask(__name__)
+# Initialize Flask app with template_folder set to the current directory
+app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Instagram login credentials
-IG_USERNAME = 'dinosaur.819513'
+IG_USERNAME = 'ramandeepra121004'
 IG_PASSWORD = 'Rahul@9899'
 
 # Google Sheets setup
@@ -20,6 +22,21 @@ SPREADSHEET_ID = '1ZKnxcXDZeKuhD-I_s-JWJY67qldmGB7pdUQ74CRrvHU'
 creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 gs_client = gspread.authorize(creds)
 sheet = gs_client.open_by_key(SPREADSHEET_ID).sheet1
+
+# Session file path
+SESSION_FILE = 'instagram_session.pkl'
+
+def save_session(cl):
+    with open(SESSION_FILE, 'wb') as f:
+        pickle.dump(cl.get_settings(), f)
+
+def load_session():
+    if os.path.exists(SESSION_FILE):
+        cl = Client()
+        with open(SESSION_FILE, 'rb') as f:
+            cl.set_settings(pickle.load(f))
+        return cl
+    return None
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -34,9 +51,12 @@ def home():
             return render_template('index.html', status=status_message)
 
         try:
-            # Instagram login
-            cl = Client()
-            cl.login(IG_USERNAME, IG_PASSWORD)
+            # Load session or login
+            cl = load_session()
+            if not cl or not cl.get_settings():
+                cl = Client()
+                cl.login(IG_USERNAME, IG_PASSWORD)
+                save_session(cl)
 
             # Get user ID
             user_id = cl.user_id_from_username(target_username)
@@ -51,9 +71,9 @@ def home():
                     img.save(filepath)
                     cl.direct_send_photo(filepath, [user_id])
 
-            # Log text only
+            # Log text only with status indicator
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            row = [now, IG_USERNAME, target_username, message]
+            row = [now, IG_USERNAME, target_username, message, "✅"]  # Add the green tick here
             sheet.append_row(row)
 
             status_message = f"✅ Message and up to 10 images sent successfully."
