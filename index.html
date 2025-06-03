@@ -2,37 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Priya Impex - Instagram Message Sender</title>
     <style>
         body {
-  background: linear-gradient(135deg, #E1306C, #F77737, #FCAF45, #833AB4, #405DE6);
-  background-size: 600% 600%;
-  animation: gradientAnimation 15s ease infinite;
-}
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #E1306C, #F77737, #FCAF45, #833AB4, #405DE6);
+            background-size: 600% 600%;
+            animation: gradientAnimation 15s ease infinite;
+        }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         .overlay {
             background-color: rgba(0, 0, 0, 0.6);
             min-height: 100vh;
             padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Excel Icon Link */
         .excel-link {
             position: absolute;
-            top: 40px;
-            left: 40px;
+            top: 20px;
+            left: 20px;
         }
 
         .excel-link img {
@@ -57,13 +56,13 @@
 
         .header h1 {
             margin-top: 15px;
-            font-size: 36px;
+            font-size: 2.2rem;
             color: #ffd700;
         }
 
         .container {
+            width: 90%;
             max-width: 500px;
-            margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.95);
             color: #333;
             padding: 30px;
@@ -86,6 +85,7 @@
             border-radius: 6px;
             border: 1px solid #ccc;
             font-size: 14px;
+            box-sizing: border-box;
         }
 
         input[type="submit"] {
@@ -111,6 +111,47 @@
             border: 1px solid #c3e6cb;
             border-radius: 5px;
         }
+
+        footer {
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.5);
+            margin-top: auto;
+            width: 100%;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .excel-link {
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header img {
+                width: 70px;
+                height: 70px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -123,9 +164,9 @@
     </a>
 
     <div class="header">
-    <img src="/static/logo/logo.jpg" alt="Priya Impex Logo">
-    <h1>Priya Impex</h1>
-</div>
+        <img src="/static/logo/logo.jpg" alt="Priya Impex Logo">
+        <h1>Priya Impex</h1>
+    </div>
 
     <div class="container">
         <form action="/" method="POST" enctype="multipart/form-data">
@@ -148,6 +189,7 @@
         {% endif %}
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
@@ -155,13 +197,14 @@
 
         form.addEventListener("submit", function () {
             submitBtn.disabled = true;
-            submitBtn.value = "Sending... ⏳"; // Optional loading text
+            submitBtn.value = "Sending... ⏳";
         });
     });
 </script>
-</body>
-<footer style="text-align: center; color: #fff; padding: 20px; background-color: rgba(0,0,0,0.5); margin-top: 50px;">
+
+<footer>
     &copy; 2025 Priya Impex. All rights reserved. <br>
     Developed with ❤️ by <strong>X VisionProgramming</strong>.
 </footer>
+</body>
 </html>
