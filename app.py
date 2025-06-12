@@ -67,12 +67,16 @@ def home():
             # Send text message
             cl.direct_send(message, [user_id])
 
-            # Handle images (send only, do not log)
+            # Handle images (send only, then delete)
             for img in images[:10]:  # Limit to 10 images
                 if img and img.filename:
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], img.filename)
                     img.save(filepath)
                     cl.direct_send_photo(filepath, [user_id])
+                    try:
+                        os.remove(filepath)
+                    except Exception as e:
+                        print(f"Failed to delete image {filepath}: {e}")
 
             # Log text only with status indicator
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
